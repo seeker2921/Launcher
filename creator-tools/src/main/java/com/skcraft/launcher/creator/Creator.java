@@ -61,9 +61,9 @@ public class Creator {
     private static File getAppDataDir() {
         String osName = System.getProperty("os.name").toLowerCase();
         if (osName.contains("win")) {
-            return new File(getFileChooseDefaultDir(), "SKCraft Modpack Creator");
+            return new File(getFileChooseDefaultDir(), "GDKCraft Modpack Creator");
         } else {
-            return new File(System.getProperty("user.home"), ".skcraftcreator");
+            return new File(System.getProperty("user.home"), ".gdkcraftcreator");
         }
     }
 
@@ -74,7 +74,7 @@ public class Creator {
         final Creator creator = new Creator();
 
         SwingUtilities.invokeAndWait(() -> {
-            SwingHelper.setSwingProperties("Modpack Creator");
+            SwingHelper.setSwingProperties("GDKCraft Modpack Creator");
             SwingHelper.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
             try {

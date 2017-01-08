@@ -49,7 +49,7 @@ public class AboutDialog extends JDialog {
         container.add(new JLabel(SwingHelper.createIcon(Creator.class, "about_header.png")), "dock north");
         container.add(new JLabel("<html>Version " + version), "wrap");
         container.add(new JLabel("<html>Licensed under GNU Lesser General Public License, version 3."), "wrap, gapbottom unrel");
-        container.add(new JLabel("<html>Created by the SKCraft team. Visit our website!"), "wrap, gapbottom unrel");
+        container.add(new JLabel("<html>Created by the SKCraft team. Modified by GDKCraft"), "wrap, gapbottom unrel");
 
         JButton okButton = new JButton("OK");
         JButton sourceCodeButton = new JButton("Source Code");
