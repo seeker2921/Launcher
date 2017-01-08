@@ -32,6 +32,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.lang.ref.WeakReference;
+import com.teamdev.jxbrowser.chromium.Browser;
+import com.teamdev.jxbrowser.chromium.swing.BrowserView;
 
 import static com.skcraft.launcher.util.SharedLocale.tr;
 
@@ -43,7 +45,7 @@ public class LauncherFrame extends JFrame {
 
     private final Launcher launcher;
 
-    @Getter
+    public static JFXPanel jfxPanel = new JFXPanel();
     private final InstanceTable instancesTable = new InstanceTable();
     private final InstanceTableModel instancesModel;
     @Getter
@@ -55,6 +57,8 @@ public class LauncherFrame extends JFrame {
     private final JButton optionsButton = new JButton(SharedLocale.tr("launcher.options"));
     private final JButton selfUpdateButton = new JButton(SharedLocale.tr("launcher.updateLauncher"));
     private final JCheckBox updateCheck = new JCheckBox(SharedLocale.tr("launcher.downloadUpdates"));
+    Browser browser = new Browser();
+    BrowserView browserView = new BrowserView(browser);
 
     /**
      * Create a new frame.
@@ -84,30 +88,16 @@ public class LauncherFrame extends JFrame {
     }
 
     private void initComponents() {
-        JPanel container = createContainerPanel();
-        container.setLayout(new MigLayout("fill, insets dialog", "[][]push[][]", "[grow][]"));
 
-        webView = createNewsPanel();
-        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, instanceScroll, webView);
-        selfUpdateButton.setVisible(launcher.getUpdateManager().getPendingUpdate());
-
-        launcher.getUpdateManager().addPropertyChangeListener(new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                if (evt.getPropertyName().equals("pendingUpdate")) {
-                    selfUpdateButton.setVisible((Boolean) evt.getNewValue());
-
-                }
-            }
-        });
+        browser.loadURL(launcher.getNewsURL().toString());
+        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, instanceScroll, browserView);
+        selfUpdateButton.setVisible(false);
 
         updateCheck.setSelected(true);
         instancesTable.setModel(instancesModel);
         launchButton.setFont(launchButton.getFont().deriveFont(Font.BOLD));
-        splitPane.setDividerLocation(200);
-        splitPane.setDividerSize(4);
-        splitPane.setOpaque(false);
-        container.add(splitPane, "grow, wrap, span 5, gapbottom unrel, w null:680, h null:350");
+        splitPane.setDividerLocation(350);
+        splitPane.setDividerSize(2);
         SwingHelper.flattenJSplitPane(splitPane);
         container.add(refreshButton);
         container.add(updateCheck);
@@ -198,7 +188,7 @@ public class LauncherFrame extends JFrame {
         JMenuItem menuItem;
 
         if (selected != null) {
-            menuItem = new JMenuItem(!selected.isLocal() ? tr("instance.install") : tr("instance.launch"));
+            menuItem = new JMenuItem(!selected.isLocal() ? "Install" : "Launch");
             menuItem.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -282,7 +272,7 @@ public class LauncherFrame extends JFrame {
         menuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                loadInstances();
+                loadInstances(true);
             }
         });
         popup.add(menuItem);
@@ -297,13 +287,21 @@ public class LauncherFrame extends JFrame {
             return;
         }
 
-        ObservableFuture<Instance> future = launcher.getInstanceTasks().delete(this, instance);
+        // Execute the deleter
+        Remover resetter = new Remover(instance);
+        ObservableFuture<Instance> future = new ObservableFuture<Instance>(
+                launcher.getExecutor().submit(resetter), resetter);
+
+        // Show progress
+        ProgressDialog.showProgress(
+                this, future, tr("instance.deletingTitle"), tr("instance.deletingStatus", instance.getTitle()));
+        SwingHelper.addErrorDialogCallback(this, future);
 
         // Update the list of instances after updating
         future.addListener(new Runnable() {
             @Override
             public void run() {
-                loadInstances();
+                loadInstances(true);
             }
         }, SwingExecutor.INSTANCE);
     }
@@ -313,7 +311,15 @@ public class LauncherFrame extends JFrame {
             return;
         }
 
-        ObservableFuture<Instance> future = launcher.getInstanceTasks().hardUpdate(this, instance);
+        // Execute the resetter
+        HardResetter resetter = new HardResetter(instance);
+        ObservableFuture<Instance> future = new ObservableFuture<Instance>(
+                launcher.getExecutor().submit(resetter), resetter);
+
+        // Show progress
+        ProgressDialog.showProgress(this, future, tr("instance.resettingTitle"),
+                tr("instance.resettingStatus", instance.getTitle()));
+        SwingHelper.addErrorDialogCallback(this, future);
 
         // Update the list of instances after updating
         future.addListener(new Runnable() {
@@ -325,8 +331,12 @@ public class LauncherFrame extends JFrame {
         }, SwingExecutor.INSTANCE);
     }
 
-    private void loadInstances() {
-        ObservableFuture<InstanceList> future = launcher.getInstanceTasks().reloadInstances(this);
+    private void loadInstances(boolean showProgress) {
+
+        browser.loadURL(launcher.getNewsURL().toString());
+        InstanceList.Enumerator loader = launcher.getInstances().createEnumerator();
+        ObservableFuture<InstanceList> future = new ObservableFuture<InstanceList>(
+                launcher.getExecutor().submit(loader), loader);
 
         future.addListener(new Runnable() {
             @Override
@@ -339,7 +349,9 @@ public class LauncherFrame extends JFrame {
             }
         }, SwingExecutor.INSTANCE);
 
-        ProgressDialog.showProgress(this, future, SharedLocale.tr("launcher.checkingTitle"), SharedLocale.tr("launcher.checkingStatus"));
+        if (showProgress) {
+            ProgressDialog.showProgress(this, future, tr("launcher.checkingTitle"), tr("launcher.checkingStatus"));
+        }
         SwingHelper.addErrorDialogCallback(this, future);
     }
 
