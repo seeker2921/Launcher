@@ -1,5 +1,5 @@
-SKCraft Launcher
-================
+GDKCraft Launcher (Forked from SKCraft Launcher)
+================================================
 
 SKCraft Launcher provides a platform for creating, testing, and distributing modpacks for groups of all sizes. It is 100% open source and works on Windows, Mac OS X and Linux/BSD.
 
@@ -123,3 +123,18 @@ Contributions by third parties must be dual licensed under the two licenses desc
 ## License
 
 The launcher is licensed under the GNU Lesser General Public License, version 3.
+
+GDKCraft ReadMe
+=================
+
+All changes to SKCraft's source code will remain under the same license of original project.
+
+## Any other open source projects used in this project will be documented below.
+
+## Any closed source projects used in this project will be documented below.
+
+jxBrowser
+=========
+license = jxBrowser License agreement.txt || https://www.teamdev.com/jxbrowser-licence-agreement
+
+jxBrowser is a closed source lib used in GDKCraft in this launcher. Presently it is only an evaluation and the license to use it in this project will expire 30 days from, 2017-01-05. 
