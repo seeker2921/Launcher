@@ -1,6 +1,30 @@
 GDKCraft Launcher (Forked from SKCraft Launcher)
 ================================================
 
+###GDKCraft ReadMe
+
+GDKCraft has utilized the open source SKCraft Launcher as a base for the GDKCraft Minecraft Launcher. GDKCraft does not claim to own the original SKCraft source code. GDKCraft does own all original GDKCraft modifications.
+All changes to SKCraft's source code will remain under the same license of original project.
+
+####Any open source projects/code used by GDKCraft Launcher will be documented below.
+No additional projects used at this time.
+
+####Any closed source projects/Libs used GDKCraft Launcher will be documented below.
+
+#####jxBrowser
+
+GDKCraft is currently evaluating the use of TeamDev's jxBrowser library in the GDKCraft Launcher. The 
+license for jxBrowser can be found in: jxBrowser License agreement.txt or at https://www.teamdev.com/jxbrowser-licence-agreement
+
+jxBrowser is a closed source lib used in the GDKCraft Launcher in the form of external JAR lib's. Presently it is only licensed to GDKCraft as an evaluation and the license to use it in this project will expire 30 days from, 2017-01-05. 
+
+GDKCraft has requested an oepn course license from TeamDev, If approved this block will reflect such. If denied, all traces of jxBrowser will be removed from this VCS repository.
+
+
+###End GDKCraft Readme
+
+###SKCraft Readme
+
 SKCraft Launcher provides a platform for creating, testing, and distributing modpacks for groups of all sizes. It is 100% open source and works on Windows, Mac OS X and Linux/BSD.
 
 With this platform, you have **full control** of the modpacks that you choose to release.
@@ -124,17 +148,3 @@ Contributions by third parties must be dual licensed under the two licenses desc
 
 The launcher is licensed under the GNU Lesser General Public License, version 3.
 
-GDKCraft ReadMe
-=================
-
-All changes to SKCraft's source code will remain under the same license of original project.
-
-## Any other open source projects used in this project will be documented below.
-
-## Any closed source projects used in this project will be documented below.
-
-jxBrowser
-=========
-license = jxBrowser License agreement.txt || https://www.teamdev.com/jxbrowser-licence-agreement
-
-jxBrowser is a closed source lib used in GDKCraft in this launcher. Presently it is only an evaluation and the license to use it in this project will expire 30 days from, 2017-01-05. 
