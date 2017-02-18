@@ -13,12 +13,7 @@ No additional projects used at this time.
 
 #####jxBrowser
 
-GDKCraft is currently evaluating the use of TeamDev's jxBrowser library in the GDKCraft Launcher. The 
-license for jxBrowser can be found in: jxBrowser License agreement.txt or at https://www.teamdev.com/jxbrowser-licence-agreement
-
-jxBrowser is a closed source lib used in the GDKCraft Launcher in the form of external JAR lib's. Presently it is only licensed to GDKCraft as an evaluation and the license to use it in this project will expire 30 days from, 2017-01-05. 
-
-GDKCraft has requested an oepn course license from TeamDev, If approved this block will reflect such. If denied, all traces of jxBrowser will be removed from this VCS repository.
+GDKCraft Launcher uses JxBrowser http://www.teamdev.com/jxbrowser, which is a proprietary software. The use of JxBrowser is governed by JxBrowser Product Licence Agreement http://www.teamdev.com/jxbrowser-licence-agreement. If you would like to use JxBrowser in your development, please contact TeamDev.
 
 
 ###End GDKCraft Readme
